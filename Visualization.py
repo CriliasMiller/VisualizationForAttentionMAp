@@ -23,7 +23,7 @@ def text_input_adjust(text_input, device, cap=False):
     # input_ids adaptation
     input_ids_remove_SEP = [x[:-1] for x in text_input.input_ids]
     maxlen = max([len(x) for x in text_input.input_ids])-1
-    input_ids_remove_SEP_pad = [x + [0] * (maxlen - len(x)) for x in input_ids_remove_SEP] # only remove SEP as HAMMER is conducted with text with CLS
+    input_ids_remove_SEP_pad = [x + [0] * (maxlen - len(x)) for x in input_ids_remove_SEP]
     text_input.input_ids = torch.LongTensor(input_ids_remove_SEP_pad).to(device) 
 
     # attention_mask adaptation
@@ -186,7 +186,7 @@ def process_image_text(image_path, text, tokenizer, test_transform, device):
     text_input.attention_mask.unsqueeze(0)
     input_ids_remove_SEP = [x[:-1] for x in text_input.input_ids]
     maxlen = max([len(x) for x in text_input.input_ids])-1
-    input_ids_remove_SEP_pad = [x + [0] * (maxlen - len(x)) for x in input_ids_remove_SEP] # only remove SEP as HAMMER is conducted with text with CLS
+    input_ids_remove_SEP_pad = [x + [0] * (maxlen - len(x)) for x in input_ids_remove_SEP]
     text_input.input_ids = torch.LongTensor(input_ids_remove_SEP_pad).to(device) 
 
     # attention_mask adaptation
