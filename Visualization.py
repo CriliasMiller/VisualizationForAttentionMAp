@@ -227,20 +227,20 @@ if __name__ == '__main__':
         transforms.ToTensor(),
         normalize,
         ])   
-    ann_file = '../data/rshaojimmy/DGM4/metadata/val.json'
-    test_config = './configs/test.yaml'
+    ann_file = 'val.json'
+    test_config = 'test.yaml'
     config = yaml.load(open(test_config, 'r'), Loader=yaml.Loader)
 
     train_dataset = VisualDataset(ann_file=config['val_file'], transform=test_transform, max_words=config['max_words'], is_train=False)              
     loader = DataLoader(train_dataset, batch_size=128, shuffle=False, num_workers=1, pin_memory=True)
 
     #-----load checkpoint-----
-    model_path = '/workspace/Crilias/coDE/results/log20241104_085822/checkpoint_best.pth'
-    bert_config_path = '/workspace/Crilias/coDE/configs/config_bert.json'
+    model_path = 'checkpoint.pth'
+    bert_config_path = 'config_bert.json'
     device = 'cuda:1'
 
-    tokenizer = BertTokenizerFast.from_pretrained('/workspace/Crilias/data/bert-base-uncased')
-    model = VisualASAP(text_encoder='/workspace/Crilias/data/bert-base-uncased', config_bert=bert_config_path)
+    tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
+    model = VisualASAP(text_encoder='bert-base-uncased', config_bert=bert_config_path)
 
     checkpoint = torch.load(model_path, map_location='cpu') 
     state_dict = checkpoint['model'] 
@@ -254,10 +254,6 @@ if __name__ == '__main__':
     block_num = 8
     
     model.text_encoder.bert.base_model.base_model.encoder.layer[block_num].crossattention.self.save_attention = True
-
-    # image_path = '/workspace/Crilias/data/rshaojimmy/DGM4/manipulation/infoswap/541597-185524-infoswap.jpg'
-    # caption = 'Children looking out of a bus window, one waving'
-    # image, text_input = process_image_text(image_path, caption, tokenizer, test_transform, device)
     
     for batch_idx, batch in enumerate(loader):
         image_dir, image, text, fake_text_pos_list, bbox = batch
@@ -313,7 +309,7 @@ if __name__ == '__main__':
                 ax[pic_num + 1].set_xticks([])
                 ax[pic_num + 1].set_xlabel(word)
 
-            save_path = f"/workspace/Crilias/visual/batch{batch_idx}_{idx}.png"
+            save_path = f"/visual/batch{batch_idx}_{idx}.png"
             plt.tight_layout()
             plt.savefig(save_path)
             plt.close(fig)
