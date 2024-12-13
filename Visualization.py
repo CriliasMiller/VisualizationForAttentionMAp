@@ -15,7 +15,6 @@ from skimage import transform as skimage_transform
 from scipy.ndimage import filters
 from matplotlib import pyplot as plt
 import re
-from dataset.dataset import DGM4_Dataset
 import yaml
 from torch.utils.data import DataLoader, Dataset
 
@@ -86,7 +85,7 @@ class Multilmodelattention(nn.Module):
         x, _ = self.crossatten(x, key, value, key_padding_mask=key_padding_mask)
         x = x + query
         return x
-class VisualASAP(nn.Module):
+class VisualModel(nn.Module):
     def __init__(self,                 
                  text_encoder = None,
                  config_bert = ''
@@ -240,7 +239,7 @@ if __name__ == '__main__':
     device = 'cuda:1'
 
     tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
-    model = VisualASAP(text_encoder='bert-base-uncased', config_bert=bert_config_path)
+    model = VisualModel(text_encoder='bert-base-uncased', config_bert=bert_config_path)
 
     checkpoint = torch.load(model_path, map_location='cpu') 
     state_dict = checkpoint['model'] 
